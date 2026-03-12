@@ -1,5 +1,6 @@
 FROM debian:13
 
+# Forked from coalton-lang/base-images
 LABEL org.opencontainers.image.source=https://github.com/coalton-lang/base-images
 LABEL org.opencontainers.image.description="SBCL base image for Coalton CI"
 LABEL org.opencontainers.image.licenses=MIT
