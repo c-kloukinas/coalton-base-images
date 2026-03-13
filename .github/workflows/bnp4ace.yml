@@ -1,6 +1,8 @@
 name: Build and publish port images
 
 on:
+  pull_request:
+
   workflow_dispatch: {}
 
   push:
