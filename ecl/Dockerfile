@@ -30,11 +30,7 @@ WORKDIR /src
 RUN curl -L -o ecl-binary.tgz \
  https://common-lisp.net/project/ecl/static/files/release/ecl-${ECL_VERSION}.tgz \
  && tar xzf ecl-binary.tgz \
- && cd ecl-${ECL_VERSION} \
- && ./configure \
- && make \
- && make install \
- && cd .. \
+ && (cd ecl-${ECL_VERSION} && ./configure --prefix=/ && make && make install) \
  && rm -r ecl-binary.tgz ecl-${ECL_VERSION} \
  && ${ECL} --eval "(print 'success)" --shell /dev/null
 
