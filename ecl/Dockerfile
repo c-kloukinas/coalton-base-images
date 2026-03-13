@@ -1,0 +1,55 @@
+FROM debian:13
+
+LABEL org.opencontainers.image.source=https://github.com/coalton-lang/base-images
+LABEL org.opencontainers.image.description="ECL base image for Coalton CI"
+LABEL org.opencontainers.image.licenses=MIT
+
+ECL_MAJOR_VERSION=24
+ECL_MEDIUM_VERSION=5
+ECL_MINOR_VERSION=10
+ECL_VERSION=${ECL_MAJOR_VERSION}.${ECL_MEDIUM_VERSION}.${ECL_MINOR_VERSION}
+ECL="ecl --norc -q"
+
+# Install dependencies
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install --no-install-recommends -y \
+  ca-certificates \
+  curl \
+  git \
+  bzip2 \
+  libgmp10 \
+  libmpfr6 \
+  \
+  build-essential \
+  \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+
+# Download and install ecl
+RUN curl -L -o ecl-binary.tgz \
+ https://common-lisp.net/project/ecl/static/files/release/ecl-${ECL_VERSION}.tgz \
+ && tar xzf ecl-binary.tgz \
+ && cd ecl-${ECL_VERSION} \
+ && ./configure \
+ && make \
+ && make install \
+ && cd .. \
+ && rm -r ecl-binary.tgz ecl-${ECL_VERSION} \
+ && ${ECL} --eval "(print 'success)" --shell /dev/null
+
+# Download and install quicklisp
+RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
+ && ${ECL} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" --shell /dev/null \
+ && rm quicklisp.lisp
+
+ENV ECL_HOME=/usr/local/lib/ecl-${ECL_VERSION}
+COPY eclrc /root/.eclrc
+
+# workaround for old quicklisp and new FSET
+WORKDIR /extras
+RUN git clone https://github.com/melisgl/named-readtables.git
+RUN git clone https://github.com/slburson/fset.git
+
+WORKDIR /lisp
+CMD ["ecl"]
