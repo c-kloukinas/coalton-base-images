@@ -1,0 +1,24 @@
+name: Build base images
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build-images:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        LISP_IMPLEMENTATION: ["abcl", "ecl", "clasp"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the Docker image
+        run: |
+               docker build ${{ matrix.LISP_IMPLEMENTATION }} --tag ghcr.io/c-kloukinas/${{ matrix.LISP_IMPLEMENTATION }}-port:latest
