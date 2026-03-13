@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
 
   push:
-    branches: [ main ]
+    branches: [ main, porting2abcl,ecl,clasp ]
 
 jobs:
   build-and-publish-images:
