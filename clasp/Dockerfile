@@ -18,7 +18,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   build-essential \
   libgmp-dev \
   libmpfr-dev \
-  gpg
+  gpg \
+  netbase
 
 # # Try to get the latest llvm packages - https://apt.llvm.org/
 # RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
