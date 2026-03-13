@@ -24,6 +24,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   \
   build-essential \
   libgmp-dev \
+  libmpfr-dev \
+  netbase \
   \
   && rm -rf /var/lib/apt/lists/*
 
