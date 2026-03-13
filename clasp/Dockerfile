@@ -15,18 +15,22 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   bzip2 \
   libgmp10 \
   libmpfr6 \
-  \
   build-essential \
-  gpg \
-  software-properties-common \
-  \
-  && rm -rf /var/lib/apt/lists/*
+  libgmp-dev \
+  libmpfr-dev \
+  gpg
+
+# RUN apt-get install --no-install-recommends -y software-properties-common
+ 
+RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
 
 # Download and install clasp
+ ## && add-apt-repository "deb https://www.thirdlaw.tech/pkg/bookworm/ ./" \
+
 RUN curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | gpg --yes --dearmor --output /etc/apt/trusted.gpg.d/thirdlaw.gpg \
- && add-apt-repository "deb https://www.thirdlaw.tech/pkg/bookworm/ ./" \
+ && echo 'deb [signed-by=/etc/apt/trusted.gpg.d/thirdlaw.gpg] https://www.thirdlaw.tech/pkg/bookworm/ ./' | tee /etc/apt/sources.list.d/thirdlaw.list \
  && apt-get update \
  && apt-get install --no-install-recommends -y clasp-cl \
  && rm -rf /var/lib/apt/lists/* \
