@@ -28,7 +28,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 WORKDIR /src
 
 # Download and install abcl
-RUN curl -fsSL https://abcl.org/releases/${ABCL_VERSION}/${ABCL_TAR} \
+RUN curl -o ${ABCL_TAR} \
+    -fsSL https://abcl.org/releases/${ABCL_VERSION}/${ABCL_TAR} \
  && tar xzf ${ABCL_TAR} \
  && mv abcl-bin-${ABCL_VERSION}/abcl.jar /bin/ \
  && echo '#! /bin/sh -' > /bin/abcl \
