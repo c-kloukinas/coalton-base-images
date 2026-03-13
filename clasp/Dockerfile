@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   libmpfr6 \
   \
   build-essential \
+  gpg \
   \
   && rm -rf /var/lib/apt/lists/*
 
