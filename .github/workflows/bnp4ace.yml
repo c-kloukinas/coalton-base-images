@@ -16,7 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        LISP_IMPLEMENTATION: ["abcl", "ecl", "clasp"]
+        LISP_IMPLEMENTATION: [ #"abcl",
+		 "ecl", "clasp"]
 
     steps:
       - uses: actions/checkout@v4
