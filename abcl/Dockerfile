@@ -4,12 +4,12 @@ LABEL org.opencontainers.image.source=https://github.com/coalton-lang/base-image
 LABEL org.opencontainers.image.description="CLASP base image for Coalton CI"
 LABEL org.opencontainers.image.licenses=MIT
 
-ABCL_MAJOR_VERSION=1
-ABCL_MEDIUM_VERSION=9
-ABCL_MINOR_VERSION=2
-ABCL_VERSION=${ABCL_MAJOR_VERSION}.${ABCL_MEDIUM_VERSION}.${ABCL_MINOR_VERSION}
-ABCL_TAR=abcl-bin-${ABCL_VERSION}.tar.gz
-ABCL="abcl --noinit --noinform --nosystem --batch"
+ARG ABCL_MAJOR_VERSION=1
+ARG ABCL_MEDIUM_VERSION=9
+ARG ABCL_MINOR_VERSION=2
+ARG ABCL_VERSION=${ABCL_MAJOR_VERSION}.${ABCL_MEDIUM_VERSION}.${ABCL_MINOR_VERSION}
+ARG ABCL_TAR=abcl-bin-${ABCL_VERSION}.tar.gz
+ARG ABCL="abcl --noinit --noinform --nosystem --batch"
 
 # Install dependencies
 ARG DEBIAN_FRONTEND=noninteractive

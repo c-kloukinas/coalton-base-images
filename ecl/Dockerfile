@@ -4,11 +4,11 @@ LABEL org.opencontainers.image.source=https://github.com/coalton-lang/base-image
 LABEL org.opencontainers.image.description="ECL base image for Coalton CI"
 LABEL org.opencontainers.image.licenses=MIT
 
-ECL_MAJOR_VERSION=24
-ECL_MEDIUM_VERSION=5
-ECL_MINOR_VERSION=10
-ECL_VERSION=${ECL_MAJOR_VERSION}.${ECL_MEDIUM_VERSION}.${ECL_MINOR_VERSION}
-ECL="ecl --norc -q"
+ARG ECL_MAJOR_VERSION=24
+ARG ECL_MEDIUM_VERSION=5
+ARG ECL_MINOR_VERSION=10
+ARG ECL_VERSION=${ECL_MAJOR_VERSION}.${ECL_MEDIUM_VERSION}.${ECL_MINOR_VERSION}
+ARG ECL="ecl --norc -q"
 
 # Install dependencies
 ARG DEBIAN_FRONTEND=noninteractive
