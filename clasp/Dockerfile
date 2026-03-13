@@ -20,6 +20,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   libmpfr-dev \
   gpg
 
+# Try to get the latest llvm packages - https://apt.llvm.org/
+RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)" \
+  && (type -a llvm clang llvm++ c++lang || echo OK)
+
 # RUN apt-get install --no-install-recommends -y software-properties-common
  
 RUN rm -rf /var/lib/apt/lists/*
