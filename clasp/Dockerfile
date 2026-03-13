@@ -1,4 +1,4 @@
-FROM debian:13
+FROM debian:12
 
 LABEL org.opencontainers.image.source=https://github.com/coalton-lang/base-images
 LABEL org.opencontainers.image.description="CLASP base image for Coalton CI"
@@ -20,9 +20,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   libmpfr-dev \
   gpg
 
-# Try to get the latest llvm packages - https://apt.llvm.org/
-RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)" \
-  && (type -a llvm clang llvm++ c++lang || echo OK)
+# # Try to get the latest llvm packages - https://apt.llvm.org/
+# RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
 
 # RUN apt-get install --no-install-recommends -y software-properties-common
  
