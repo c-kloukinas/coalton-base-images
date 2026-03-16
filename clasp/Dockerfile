@@ -4,7 +4,8 @@ LABEL org.opencontainers.image.source=https://github.com/coalton-lang/base-image
 LABEL org.opencontainers.image.description="CLASP base image for Coalton CI"
 LABEL org.opencontainers.image.licenses=MIT
 
-ARG CLASP="clasp --non-interactive --norc"
+# ARG CLASP="clasp --non-interactive --norc"
+ARG CLASP="clasp --non-interactive"
 
 # Install dependencies
 ARG DEBIAN_FRONTEND=noninteractive

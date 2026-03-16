@@ -9,7 +9,8 @@ ARG ABCL_MEDIUM_VERSION=9
 ARG ABCL_MINOR_VERSION=2
 ARG ABCL_VERSION=${ABCL_MAJOR_VERSION}.${ABCL_MEDIUM_VERSION}.${ABCL_MINOR_VERSION}
 ARG ABCL_TAR=abcl-bin-${ABCL_VERSION}.tar.gz
-ARG ABCL="abcl --noinit --noinform --nosystem --batch"
+# ARG ABCL="abcl --noinit --noinform --nosystem --batch"
+ARG ABCL="abcl --noinform --batch"
 
 # Install dependencies
 ARG DEBIAN_FRONTEND=noninteractive
