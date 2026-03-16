@@ -48,6 +48,7 @@ RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
 
 COPY clasprc /.clasprc
 COPY clasprc /root/.clasprc
+RUN chmod 644 /.clasprc /root/.clasprc
 
 # workaround for old quicklisp and new FSet
 WORKDIR /extras

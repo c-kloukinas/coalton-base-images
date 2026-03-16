@@ -46,6 +46,7 @@ RUN set -x ; curl -O https://beta.quicklisp.org/quicklisp.lisp \
 
 COPY abclrc /.abclrc
 COPY abclrc /root/.abclrc
+RUN chmod 644 /.abclrc /root/.abclrc
 
 # workaround for old quicklisp and new FSet
 WORKDIR /extras
