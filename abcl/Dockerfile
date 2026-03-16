@@ -1,7 +1,7 @@
 FROM debian:13
 
 LABEL org.opencontainers.image.source=https://github.com/coalton-lang/base-images
-LABEL org.opencontainers.image.description="CLASP base image for Coalton CI"
+LABEL org.opencontainers.image.description="ABCL base image for Coalton CI"
 LABEL org.opencontainers.image.licenses=MIT
 
 ARG ABCL_MAJOR_VERSION=1
@@ -43,6 +43,8 @@ RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && ${ABCL} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" \
  && rm quicklisp.lisp
 
+RUN echo ${HOME}/.abclrc ; cat ${HOME}/.abclrc
+RUN echo abclrc ; cat abclrc
 COPY abclrc /.abclrc
 
 # workaround for old quicklisp and new FSet
