@@ -45,7 +45,7 @@ RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && ${CLASP} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" \
  && rm quicklisp.lisp
 
-COPY clasprc /root/.clasprc
+COPY clasprc /.clasprc
 
 # workaround for old quicklisp and new FSet
 WORKDIR /extras

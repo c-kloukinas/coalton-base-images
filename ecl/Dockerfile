@@ -47,7 +47,7 @@ RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && rm quicklisp.lisp
 
 ENV ECL_HOME=/usr/local/lib/ecl-${ECL_VERSION}
-COPY eclrc /root/.eclrc
+COPY eclrc /.eclrc
 
 # workaround for old quicklisp and new FSET
 WORKDIR /extras

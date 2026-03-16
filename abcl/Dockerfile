@@ -43,7 +43,7 @@ RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && ${ABCL} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" \
  && rm quicklisp.lisp
 
-COPY abclrc /root/.abclrc
+COPY abclrc /.abclrc
 
 # workaround for old quicklisp and new FSet
 WORKDIR /extras
