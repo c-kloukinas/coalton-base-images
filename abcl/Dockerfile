@@ -40,19 +40,12 @@ RUN curl -o ${ABCL_TAR} \
  && rm -rf ${ABCL_TAR} abcl-bin-${ABCL_VERSION}/
 
 # Download and install quicklisp
-RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
+RUN set -x ; curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && ${ABCL} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" \
  && rm quicklisp.lisp
 
-RUN for d in / /root /home/github ; do \
-      for f in abclrc .abclrc ; do \
-        if [ -f ${d}/${f} ]; then \
-          echo ${d}/${f} ; cat ${d}/${f} ; \
-        fi ; \
-      done ; \
-    done
-RUN cat /no-such-file
 COPY abclrc /.abclrc
+COPY abclrc /root/.abclrc
 
 # workaround for old quicklisp and new FSet
 WORKDIR /extras

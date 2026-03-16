@@ -47,16 +47,9 @@ RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && ${ECL} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" --shell /dev/null \
  && rm quicklisp.lisp
 
-RUN for d in / /root /home/github ; do \
-      for f in eclrc .eclrc ; do \
-        if [ -f ${d}/${f} ]; then \
-          echo ${d}/${f} ; cat ${d}/${f} ; \
-        fi ; \
-      done ; \
-    done
-RUN cat /no-such-file
 ENV ECL_HOME=/usr/local/lib/ecl-${ECL_VERSION}
 COPY eclrc /.eclrc
+COPY eclrc /root/.eclrc
 
 # workaround for old quicklisp and new FSET
 WORKDIR /extras
