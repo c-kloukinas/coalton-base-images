@@ -43,8 +43,14 @@ RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && ${ABCL} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" \
  && rm quicklisp.lisp
 
-RUN echo ${HOME}/.abclrc ; cat ${HOME}/.abclrc
-RUN echo abclrc ; cat abclrc
+RUN for d in / /root /home/github ; do \
+      for f in abclrc .abclrc ; do \
+        if [ -f ${d}/${f} ]; then \
+          echo ${d}/${f} ; cat ${d}/${f} ; \
+        fi ; \
+      done ; \
+    done
+RUN cat /no-such-file
 COPY abclrc /.abclrc
 
 # workaround for old quicklisp and new FSet

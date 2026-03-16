@@ -45,6 +45,14 @@ RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && ${CLASP} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" \
  && rm quicklisp.lisp
 
+RUN for d in / /root /home/github ; do \
+      for f in clasprc .clasprc ; do \
+        if [ -f ${d}/${f} ]; then \
+          echo ${d}/${f} ; cat ${d}/${f} ; \
+        fi ; \
+      done ; \
+    done
+RUN cat /no-such-file
 COPY clasprc /.clasprc
 
 # workaround for old quicklisp and new FSet
