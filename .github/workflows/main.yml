@@ -32,10 +32,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and publish the Docker image
         run: |
-<<<<<<< HEAD
                docker build ${{ matrix.LISP_IMPLEMENTATION }} --build-arg ALLEGRO_LICENSE --tag ghcr.io/${{ github.repository_owner }}/${{ matrix.LISP_IMPLEMENTATION }}-base:latest
                docker push ghcr.io/${{ github.repository_owner }}/${{ matrix.LISP_IMPLEMENTATION }}-base:latest
-=======
-               docker build ${{ matrix.LISP_IMPLEMENTATION }} --build-arg ALLEGRO_LICENSE --tag ghcr.io/c-kloukinas/${{ matrix.LISP_IMPLEMENTATION }}-base:latest
-               docker push ghcr.io/c-kloukinas/${{ matrix.LISP_IMPLEMENTATION }}-base:latest
->>>>>>> 814ffb0 (Update main.yml - Push built images to my own GitHub Container Registry (GHCR))
