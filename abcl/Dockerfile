@@ -22,22 +22,39 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   libgmp10 \
   libmpfr6 \
   \
+  default-jdk ant \
   default-jre-headless \
   \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
 
-# Download and install abcl
-RUN curl -o ${ABCL_TAR} \
-    -fsSL https://abcl.org/releases/${ABCL_VERSION}/${ABCL_TAR} \
- && tar xzf ${ABCL_TAR} \
- && mv abcl-bin-${ABCL_VERSION}/abcl.jar /bin/ \
- && echo '#! /bin/sh -' > /bin/abcl \
- && echo 'exec java -cp /bin/abcl.jar:"$CLASSPATH" org.armedbear.lisp.Main "$@"' >> /bin/abcl \
- && chmod 755 /bin/abcl \
- && ${ABCL} --eval "(print 'success)" \
- && rm -rf ${ABCL_TAR} abcl-bin-${ABCL_VERSION}/
+### Download and install abcl
+## The latest release 1.9.2 doesn't work with FSet - commented out.
+# RUN curl -o ${ABCL_TAR} \
+#     -fsSL https://abcl.org/releases/${ABCL_VERSION}/${ABCL_TAR} \
+#  && tar xzf ${ABCL_TAR} \
+#  && mv abcl-bin-${ABCL_VERSION}/abcl.jar /bin/ \
+#  && echo '#! /bin/sh -' > /bin/abcl \
+#  && echo 'exec java -cp /bin/abcl.jar:"$CLASSPATH" org.armedbear.lisp.Main "$@"' >> /bin/abcl \
+#  && chmod 755 /bin/abcl \
+#  && ${ABCL} --eval "(print 'success)" \
+#  && rm -rf ${ABCL_TAR} abcl-bin-${ABCL_VERSION}/
+##
+## Using abcl from its repo instead.
+RUN git clone https://github.com/armedbear/abcl.git \
+  && cd abcl \
+  && ant -f build.xml abcl.jar \
+  && cp -p dist/abcl.jar /bin \
+  && touch /bin/abcl \
+  && chmod 755 /bin/abcl* \
+  && ( \
+     echo '#! /bin/sh -' ; \
+     echo 'ABCL_JAR=/bin/abcl.jar	# Use your own path here.' ; \
+     echo 'JAVA=$(which java)' ; \
+     echo 'ABCL="${JAVA} -server -Xrs -cp ${ABCL_JAR} org.armedbear.lisp.Main"' ; \
+     echo 'exec $ABCL "$@"' \
+     ) >> /bin/abcl
 
 # Download and install quicklisp
 RUN set -x ; curl -O https://beta.quicklisp.org/quicklisp.lisp \
