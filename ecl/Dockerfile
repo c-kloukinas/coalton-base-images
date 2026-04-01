@@ -15,6 +15,41 @@ ARG CXX=g++-14
 
 # Install dependencies
 ARG DEBIAN_FRONTEND=noninteractive
+
+## From https://hub.docker.com/r/miktex/miktex/dockerfile
+# 1 Install dependencies for miktex
+RUN    apt-get update \
+    && apt-get install -y --no-install-recommends \
+           apt-transport-https \
+           ca-certificates \
+           dirmngr \
+           ghostscript \
+           gnupg \
+           gosu \
+           make \
+           perl
+# 2 Install miktex's repository
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D6BC243565B2087BC3F897C9277A7293F59E4889
+RUN echo "deb http://miktex.org/download/ubuntu focal universe" | tee /etc/apt/sources.list.d/miktex.list
+RUN    apt-get update -y \
+    && apt-get install -y --no-install-recommends \
+           miktex
+
+# 3 Setup miktex
+RUN    miktexsetup finish \
+    && initexmf --admin --set-config-value=[MPM]AutoInstall=1 \
+    && mpm --admin --update-db \
+    && mpm --admin \
+           --install amsfonts \
+           --install biber-linux-x86_64 \
+    && initexmf --admin --update-fndb
+
+# 4 Define some miktex environment variables
+ENV MIKTEX_USERCONFIG=/miktex/.miktex/texmfs/config
+ENV MIKTEX_USERDATA=/miktex/.miktex/texmfs/data
+ENV MIKTEX_USERINSTALL=/miktex/.miktex/texmfs/install
+
+# Ecl Dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
   ca-certificates \
   curl \
@@ -39,6 +74,7 @@ RUN curl -L -o ecl-binary.tgz \
  && gcc --version \
  && gcc-14 --version \
  && (cd ecl-${ECL_VERSION} && ./configure --prefix=/ && make && make install) \
+ && (echo Building the Ecl PDF manual ; cd ecl-${ECL_VERSION} && make doc && ( cd build/doc/ ; make manual && cd manual ; ( make ecl-manual.pdf && cp -p ecl-manual.pdf / ) || echo PDF manual building failed ) ) \
  && rm -r ecl-binary.tgz ecl-${ECL_VERSION} \
  && ${ECL} --eval "(print 'success)" --shell /dev/null
 
