@@ -1,9 +1,9 @@
 FROM debian:13
 # Debian 13 is trixie
-# Debian 12 is bookworm
+# Debian 12 is bookworm # miktex has a repository for bookworm
 # Debian 11 is bullseye
 # Debian 10 is buster
-# Debian  9 is stretch 	# miktex may need this one
+# Debian  9 is stretch
 
 LABEL org.opencontainers.image.source=https://github.com/coalton-lang/base-images
 LABEL org.opencontainers.image.description="ECL base image for Coalton CI"
@@ -28,15 +28,17 @@ RUN    apt-get update \
            apt-transport-https \
            ca-certificates \
            dirmngr \
-           ghostscript \
            gnupg \
            gosu \
            make \
-           perl
+           perl \
+           curl
+
 # 2 Install miktex's repository
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D6BC243565B2087BC3F897C9277A7293F59E4889
-RUN echo "deb http://miktex.org/download/debian stretch universe" | tee /etc/apt/sources.list.d/miktex.list
-RUN    apt-get update -y \
+## From https://miktex.org/download/
+RUN curl -fsSL https://miktex.org/download/key | gpg --dearmor -o /usr/share/keyrings/miktex.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/miktex.gpg] https://miktex.org/download/debian bookworm universe" > /etc/apt/sources.list.d/miktex.list
+RUN    apt-get update  -y \
     && apt-get install -y --no-install-recommends \
            miktex
 
