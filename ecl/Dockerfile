@@ -1,4 +1,4 @@
-FROM debian:12
+FROM debian:13
 # Debian 13 is trixie
 # Debian 12 is bookworm # miktex has a repository for bookworm
 # Debian 11 is bullseye
