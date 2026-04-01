@@ -70,8 +70,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   libmpfr-dev \
   netbase \
   \
-  gcc-14 \
-  \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
