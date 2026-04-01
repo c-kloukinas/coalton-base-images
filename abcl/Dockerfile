@@ -68,6 +68,7 @@ RUN chmod 644 /.abclrc /root/.abclrc
 # workaround for old quicklisp and new FSet
 WORKDIR /extras
 RUN git clone https://github.com/melisgl/named-readtables.git
+RUN git clone https://github.com/slburson/misc-extensions.git
 RUN git clone https://github.com/slburson/fset.git
 
 WORKDIR /lisp

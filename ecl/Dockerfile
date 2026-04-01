@@ -55,6 +55,7 @@ RUN chmod 644 /.eclrc /root/.eclrc
 # workaround for old quicklisp and new FSET
 WORKDIR /extras
 RUN git clone https://github.com/melisgl/named-readtables.git
+RUN git clone https://github.com/slburson/misc-extensions.git
 RUN git clone https://github.com/slburson/fset.git
 
 WORKDIR /lisp
