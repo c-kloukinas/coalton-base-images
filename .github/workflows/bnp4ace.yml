@@ -3,7 +3,7 @@ name: Build and publish _port_ images
 on:
   pull_request:
 
-  workflow_dispatch:
+  workflow_dispatch: {}
 
   push:
     branches:
@@ -17,7 +17,8 @@ jobs:
       fail-fast: false
       matrix:
         # commented out since they're built already
-        LISP_IMPLEMENTATION: [ "abcl", "ecl", "clasp" ]
+        LISP_IMPLEMENTATION: [ "abcl", # "ecl",
+				"clasp" ]
 
     steps:
       - uses: actions/checkout@v4
