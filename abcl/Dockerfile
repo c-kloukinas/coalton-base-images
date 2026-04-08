@@ -70,6 +70,8 @@ WORKDIR /extras
 RUN git clone https://github.com/melisgl/named-readtables.git
 RUN git clone https://github.com/slburson/misc-extensions.git
 RUN git clone https://github.com/slburson/fset.git
+RUN git clone --single-branch --branch fix-define-test-package-for-abcl \
+              https://github.com/appleby/fiasco.git fiasco
 
 WORKDIR /lisp
 CMD ["abcl"]
