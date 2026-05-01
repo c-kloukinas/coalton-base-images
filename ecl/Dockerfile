@@ -112,7 +112,8 @@ RUN \
      ; echo '(format t "Finished loading libs~%"))' \
     ) > /load-all-libs.lisp \
  && wc -l /load-all-libs.lisp \
- && ${ECL} --shell /load-all-libs.lisp
+ && ${ECL} --shell /load-all-libs.lisp \
+ && rm -rf /root/.cache
 # && ${ECL} --eval '#-quicklisp (load "/root/quicklisp/setup.lisp")' --shell /load-all-libs.lisp
 
 WORKDIR /lisp

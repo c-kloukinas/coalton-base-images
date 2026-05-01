@@ -105,7 +105,8 @@ RUN \
      ; echo '(format t "Finished loading libs~%"))' \
     ) > /load-all-libs.lisp \
  && wc -l /load-all-libs.lisp \
- && ${CLASP} --eval '#-quicklisp (load "/root/quicklisp/setup.lisp") #+quicklisp (+ 1 1)' --script /load-all-libs.lisp
+ && ${CLASP} --eval '#-quicklisp (load "/root/quicklisp/setup.lisp") #+quicklisp (+ 1 1)' --script /load-all-libs.lisp \
+ && rm -rf /root/.cache
 ## In clasp, --script implies --no-rc !!!
 # && ${CLASP} --script /load-all-libs.lisp
 
