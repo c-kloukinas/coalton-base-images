@@ -59,11 +59,12 @@ RUN git clone https://github.com/armedbear/abcl.git \
 # Download and install quicklisp
 RUN set -x ; curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && ${ABCL} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" \
- && rm quicklisp.lisp && mkdir -p /root/
+ && rm quicklisp.lisp && mkdir -p /root/ \
+ && find / -name 'setup.lisp'
 
 COPY abclrc /.abclrc
 COPY abclrc /root/.abclrc
-RUN chmod 644 /.abclrc /root/.abclrc
+RUN chmod 644 /.abclrc /root/.abclrc && ls -lrt /.abclrc /root/.abclrc
 
 # workaround for old quicklisp and new FSet
 WORKDIR /extras
@@ -114,14 +115,21 @@ yason"
 
 WORKDIR /
 
-RUN ( echo '(progn (format t "Loading libs~%")' \
+RUN \
+    ( echo '(progn (format t "Loading libs~%")' \
      ; for f in ${ALL_LIBS} ; do \
          echo '  (cl:handler-case (ql:quickload :$f) (cl:error (c) (declare (ignore c) (format t "*** Failed to load ~A!!! ***~%" :$f))))' \
      ; done \
      ; echo '(format t "Finished loading libs~%"))' \
-    ) > /load-all-libs.lisp
-RUN wc -l /load-all-libs.lisp
-RUN ${ABCL} --noinform --batch --load /.abclrc --load /load-all-libs.lisp
+    ) > /load-all-libs.lisp \
+    ; ( echo '(progn (format t "Loading libs again~%")' \
+     ; for f in ${ALL_LIBS} ; do \
+         echo '  (ql:quickload :$f)' \
+     ; done \
+     ; echo '(format t "Finished loading libs~%"))' \
+    ) >> /load-all-libs.lisp \
+ && wc -l /load-all-libs.lisp \
+ && ${ABCL} --eval '#-quicklisp (load "/root/quicklisp/setup.lisp")' --load /load-all-libs.lisp
 
 WORKDIR /lisp
 CMD ["abcl"]

@@ -48,12 +48,13 @@ RUN ( curl -L -o ecl-binary.tgz \
 # Download and install quicklisp
 RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && ${ECL} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" --shell /dev/null \
- && rm quicklisp.lisp && mkdir -p /root/
+ && rm quicklisp.lisp && mkdir -p /root/ \
+ && find / -name 'setup.lisp'
 
 ENV ECL_HOME=/usr/local/lib/ecl-${ECL_VERSION}
 COPY eclrc /.eclrc
 COPY eclrc /root/.eclrc
-RUN chmod 644 /.eclrc /root/.eclrc
+RUN chmod 644 /.eclrc /root/.eclrc && ls -lrt /.eclrc /root/.eclrc
 
 # workaround for old quicklisp and new FSET
 WORKDIR /extras
@@ -104,14 +105,21 @@ yason"
 
 WORKDIR /
 
-RUN ( echo '(progn (format t "Loading libs~%")' \
+RUN \
+    ( echo '(progn (format t "Loading libs~%")' \
      ; for f in ${ALL_LIBS} ; do \
          echo '  (cl:handler-case (ql:quickload :$f) (cl:error (c) (declare (ignore c) (format t "*** Failed to load ~A!!! ***~%" :$f))))' \
      ; done \
      ; echo '(format t "Finished loading libs~%"))' \
-    ) > /load-all-libs.lisp
-RUN wc -l /load-all-libs.lisp
-RUN ${ECL} --load /.eclrc --shell /load-all-libs.lisp
+    ) > /load-all-libs.lisp \
+    ; ( echo '(progn (format t "Loading libs again~%")' \
+     ; for f in ${ALL_LIBS} ; do \
+         echo '  (ql:quickload :$f)' \
+     ; done \
+     ; echo '(format t "Finished loading libs~%"))' \
+    ) >> /load-all-libs.lisp \
+ && wc -l /load-all-libs.lisp \
+ && ${ECL} --eval '#-quicklisp (load "/root/quicklisp/setup.lisp")' --shell /load-all-libs.lisp
 
 WORKDIR /lisp
 
