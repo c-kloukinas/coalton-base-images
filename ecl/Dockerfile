@@ -48,7 +48,7 @@ RUN ( curl -L -o ecl-binary.tgz \
 # Download and install quicklisp
 RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && ${ECL} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" --shell /dev/null \
- && rm quicklisp.lisp
+ && rm quicklisp.lisp && mkdir -p /root/
 
 ENV ECL_HOME=/usr/local/lib/ecl-${ECL_VERSION}
 COPY eclrc /.eclrc
@@ -101,8 +101,14 @@ trivial-indent \
 trivial-macroexpand-all \
 type-i \
 yason"
-RUN ( echo '(progn ' ; for f in ${ALL_LIBS} ; do echo '  (cl:handler-case (ql:quickload :$f) (cl:error (c) (declare (ignore c))))' ; done ; echo ')' ) > load-all-libs.lisp
-RUN ${ECL} --load load-all-libs.lisp --shell /dev/null
+RUN ( echo '(progn (format t "Loading libs~%")' \
+     ; for f in ${ALL_LIBS} ; do \
+         echo '  (cl:handler-case (ql:quickload :$f) (cl:error (c) (declare (ignore c) (format t "*** Failed to load ~A!!! ***~%" :$f))))' \
+     ; done \
+     ; echo '(format t "Finished loading libs~%"))' \
+    ) > /load-all-libs.lisp
+RUN wc -l /load-all-libs.lisp
+RUN ${ECL} --load /root/.eclrc --shell /load-all-libs.lisp
 
 WORKDIR /lisp
 CMD ["ecl"]

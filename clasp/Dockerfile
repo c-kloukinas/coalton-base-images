@@ -44,7 +44,7 @@ RUN curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | gpg --yes --dearmor --out
 # Download and install quicklisp
 RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
  && ${CLASP} --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" \
- && rm quicklisp.lisp
+ && rm quicklisp.lisp && mkdir -p /root/
 
 COPY clasprc /.clasprc
 COPY clasprc /root/.clasprc
@@ -94,8 +94,14 @@ trivial-indent \
 trivial-macroexpand-all \
 type-i \
 yason"
-RUN ( echo '(progn ' ; for f in ${ALL_LIBS} ; do echo '  (cl:handler-case (ql:quickload :$f) (cl:error (c) (declare (ignore c))))' ; done ; echo ')' ) > load-all-libs.lisp
-RUN ${CLASP} --load load-all-libs.lisp
+RUN ( echo '(progn (format t "Loading libs~%")' \
+     ; for f in ${ALL_LIBS} ; do \
+         echo '  (cl:handler-case (ql:quickload :$f) (cl:error (c) (declare (ignore c) (format t "*** Failed to load ~A!!! ***~%" :$f))))' \
+     ; done \
+     ; echo '(format t "Finished loading libs~%"))' \
+    ) > /load-all-libs.lisp
+RUN wc -l /load-all-libs.lisp
+RUN ${CLASP} --load /root/.clasprc --script /load-all-libs.lisp
 
 WORKDIR /lisp
 CMD ["clasp"]
