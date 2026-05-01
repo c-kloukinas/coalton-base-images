@@ -101,6 +101,9 @@ trivial-indent \
 trivial-macroexpand-all \
 type-i \
 yason"
+
+WORKDIR /
+
 RUN ( echo '(progn (format t "Loading libs~%")' \
      ; for f in ${ALL_LIBS} ; do \
          echo '  (cl:handler-case (ql:quickload :$f) (cl:error (c) (declare (ignore c) (format t "*** Failed to load ~A!!! ***~%" :$f))))' \
@@ -108,7 +111,8 @@ RUN ( echo '(progn (format t "Loading libs~%")' \
      ; echo '(format t "Finished loading libs~%"))' \
     ) > /load-all-libs.lisp
 RUN wc -l /load-all-libs.lisp
-RUN ${ECL} --load /root/.eclrc --shell /load-all-libs.lisp
+RUN ${ECL} --load /.eclrc --shell /load-all-libs.lisp
 
 WORKDIR /lisp
+
 CMD ["ecl"]
