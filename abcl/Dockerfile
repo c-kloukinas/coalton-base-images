@@ -73,5 +73,46 @@ RUN git clone https://github.com/slburson/fset.git
 RUN git clone --single-branch --branch fix-define-test-package-for-abcl \
               https://github.com/appleby/fiasco.git fiasco
 
+# fetch all needed QL libraries
+ARG ALL_LIBS="acclimation \
+alexandria \
+bordeaux-threads \
+cl-ppcre \
+closer-mop \
+coalton \
+computable-reals \
+concrete-syntax-tree \
+documentation-utils \
+eclector \
+fiasco \
+float-features \
+global-vars \
+html-entities \
+in-nomine \
+introspect-environment \
+iterate-release \
+lisp-namespace \
+mgl-pax \
+mt19937 \
+parse-declarations \
+parse-number \
+serapeum \
+spinneret \
+split-sequence \
+string-case \
+trivia \
+trivial-arguments \
+trivial-cltl2 \
+trivial-features \
+trivial-file-size \
+trivial-garbage \
+trivial-gray-streams \
+trivial-indent \
+trivial-macroexpand-all \
+type-i \
+yason"
+RUN ( echo '(progn ' ; for f in ${ALL_LIBS} ; do echo '  (cl:handler-case (ql:quickload :$f) (cl:error (c) (declare (ignore c))))' ; done ; echo ')' ) > load-all-libs.lisp
+RUN ${ABCL} --load load-all-libs.lisp
+
 WORKDIR /lisp
 CMD ["abcl"]
