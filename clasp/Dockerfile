@@ -63,7 +63,6 @@ alexandria \
 bordeaux-threads \
 cl-ppcre \
 closer-mop \
-coalton \
 computable-reals \
 concrete-syntax-tree \
 documentation-utils \
@@ -106,7 +105,8 @@ RUN \
      ; echo '(format t "Finished loading libs~%"))' \
     ) > /load-all-libs.lisp \
  && wc -l /load-all-libs.lisp \
- && ${CLASP} --eval '#-quicklisp (load "/root/quicklisp/setup.lisp")' --script /load-all-libs.lisp
+ && ${CLASP} --script /load-all-libs.lisp
+# && ${CLASP} --eval '#-quicklisp (load "/root/quicklisp/setup.lisp")' --script /load-all-libs.lisp
 
 WORKDIR /lisp
 CMD ["clasp"]
