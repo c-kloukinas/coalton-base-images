@@ -33,8 +33,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 WORKDIR /src
 
 # Download and install ecl
-RUN curl -L -o ecl-binary.tgz \
- https://common-lisp.net/project/ecl/static/files/release/ecl-${ECL_VERSION}.tgz \
+RUN ( curl -L -o ecl-binary.tgz \
+      https://ecl.common-lisp.dev/static/files/release/ecl-${ECL_VERSION}.tgz \
+    || curl --insecure -o ecl-binary.tgz \
+      https://ecl.common-lisp.dev/static/files/release/ecl-${ECL_VERSION}.tgz \
+    ) \
  && tar xzf ecl-binary.tgz \
  && gcc --version \
  && gcc-14 --version \
