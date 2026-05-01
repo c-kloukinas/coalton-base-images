@@ -118,16 +118,10 @@ WORKDIR /
 RUN \
     ( echo '(progn (format t "Loading libs~%")' \
      ; for f in ${ALL_LIBS} ; do \
-         echo '  (cl:handler-case (ql:quickload :$f) (cl:error (c) (declare (ignore c) (format t "*** Failed to load ~A!!! ***~%" :$f))))' \
+         echo '  (cl:handler-case (ql:quickload :'$f') (cl:error (c) (declare (ignore c) (format t "*** Failed to load ~A!!! ***~%" :'$f'))))' \
      ; done \
      ; echo '(format t "Finished loading libs~%"))' \
     ) > /load-all-libs.lisp \
-    ; ( echo '(progn (format t "Loading libs again~%")' \
-     ; for f in ${ALL_LIBS} ; do \
-         echo '  (ql:quickload :$f)' \
-     ; done \
-     ; echo '(format t "Finished loading libs~%"))' \
-    ) >> /load-all-libs.lisp \
  && wc -l /load-all-libs.lisp \
  && ${ABCL} --eval '#-quicklisp (load "/root/quicklisp/setup.lisp")' --load /load-all-libs.lisp
 
