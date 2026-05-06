@@ -35,8 +35,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 WORKDIR /src
 
 # Download and install ecl
-RUN test "${USE_REPO}" != t \
- && echo Using release version ecl-${ECL_VERSION} \
+RUN if [ "${USE_REPO}" != t ] ; then \
+ echo Using release version ecl-${ECL_VERSION} \
  && ( curl -L -o ecl-binary.tgz \
       https://ecl.common-lisp.dev/static/files/release/ecl-${ECL_VERSION}.tgz \
     || curl --insecure -o ecl-binary.tgz \
@@ -47,10 +47,11 @@ RUN test "${USE_REPO}" != t \
  && gcc-14 --version \
  && (cd ecl-${ECL_VERSION} && ./configure --prefix=/ && make && make install) \
  && rm -r ecl-binary.tgz ecl-${ECL_VERSION} \
- && ${ECL} --eval "(print 'success)" --shell /dev/null
+ && ${ECL} --eval "(print 'success)" --shell /dev/null ; \
+ fi
 
-RUN test "${USE_REPO}" = t \
- && echo Using master branch of the ecl repository \
+RUN if [ "${USE_REPO}" = t ] ; then \
+ echo Using master branch of the ecl repository \
  && git clone -b master --single-branch \
         git@gitlab.com:embeddable-common-lisp/ecl.git \
  && cd ecl \
@@ -58,7 +59,8 @@ RUN test "${USE_REPO}" = t \
  && ./configure \
  && make \
  && make install \
- && ${ECL} --eval "(print 'success)" --shell /dev/null
+ && ${ECL} --eval "(print 'success)" --shell /dev/null ; \
+ fi
 
 # Download and install quicklisp
 RUN curl -O https://beta.quicklisp.org/quicklisp.lisp \
