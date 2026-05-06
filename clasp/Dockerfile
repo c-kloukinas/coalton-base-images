@@ -58,42 +58,21 @@ RUN git clone https://github.com/slburson/misc-extensions.git
 RUN git clone https://github.com/slburson/fset.git
 
 # fetch all needed QL libraries
-ARG ALL_LIBS="acclimation \
-alexandria \
-bordeaux-threads \
-cl-ppcre \
-closer-mop \
-computable-reals \
-concrete-syntax-tree \
-documentation-utils \
-eclector \
-fiasco \
-float-features \
-global-vars \
-html-entities \
-in-nomine \
-introspect-environment \
-iterate-release \
-lisp-namespace \
-mgl-pax \
-mt19937 \
-parse-declarations \
-parse-number \
-serapeum \
-spinneret \
-split-sequence \
-string-case \
-trivia \
-trivial-arguments \
-trivial-cltl2 \
-trivial-features \
-trivial-file-size \
-trivial-garbage \
+ARG ALL_LIBS="trivial-garbage \
 trivial-gray-streams \
+autoload \
 trivial-indent \
-trivial-macroexpand-all \
-type-i \
-yason"
+trivial-features \
+closer-mop \
+acclimation \
+alexandria \
+source-error \
+mgl-pax-bootstrap \
+documentation-utils \
+concrete-syntax-tree \
+float-features \
+eclector-concrete-syntax-tree \
+eclector"
 
 WORKDIR /
 
