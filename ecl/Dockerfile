@@ -53,7 +53,7 @@ RUN if [ "${USE_REPO}" != t ] ; then \
 RUN if [ "${USE_REPO}" = t ] ; then \
  echo Using master branch of the ecl repository \
  && git clone -b master --single-branch \
-        git@gitlab.com:embeddable-common-lisp/ecl.git \
+        https://gitlab.com/embeddable-common-lisp/ecl.git \
  && cd ecl \
  && (make distclean || echo cannot distclean for some reason) \
  && ./configure \
