@@ -4,6 +4,8 @@ LABEL org.opencontainers.image.source=https://github.com/coalton-lang/base-image
 LABEL org.opencontainers.image.description="ECL base image for Coalton CI"
 LABEL org.opencontainers.image.licenses=MIT
 
+ARG USE_REPO=t
+
 ARG ECL_MAJOR_VERSION=26
 ARG ECL_MEDIUM_VERSION=3
 ARG ECL_MINOR_VERSION=27
@@ -33,7 +35,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 WORKDIR /src
 
 # Download and install ecl
-RUN ( curl -L -o ecl-binary.tgz \
+RUN test "${USE_REPO}" != t \
+ && echo Using release version ecl-${ECL_VERSION} \
+ && ( curl -L -o ecl-binary.tgz \
       https://ecl.common-lisp.dev/static/files/release/ecl-${ECL_VERSION}.tgz \
     || curl --insecure -o ecl-binary.tgz \
       https://ecl.common-lisp.dev/static/files/release/ecl-${ECL_VERSION}.tgz \
@@ -43,6 +47,17 @@ RUN ( curl -L -o ecl-binary.tgz \
  && gcc-14 --version \
  && (cd ecl-${ECL_VERSION} && ./configure --prefix=/ && make && make install) \
  && rm -r ecl-binary.tgz ecl-${ECL_VERSION} \
+ && ${ECL} --eval "(print 'success)" --shell /dev/null
+
+RUN test "${USE_REPO}" = t \
+ && echo Using master branch of the ecl repository \
+ && git clone -b master --single-branch \
+        git@gitlab.com:embeddable-common-lisp/ecl.git \
+ && cd ecl \
+ && (make distclean || echo cannot distclean for some reason) \
+ && ./configure \
+ && make \
+ && make install \
  && ${ECL} --eval "(print 'success)" --shell /dev/null
 
 # Download and install quicklisp
