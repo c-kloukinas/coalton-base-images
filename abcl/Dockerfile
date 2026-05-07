@@ -88,6 +88,7 @@ mgl-pax-bootstrap \
 documentation-utils \
 concrete-syntax-tree \
 float-features \
+computable-reals \
 eclector-concrete-syntax-tree \
 eclector"
 
