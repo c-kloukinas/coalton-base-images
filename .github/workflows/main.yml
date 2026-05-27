@@ -3,12 +3,12 @@ name: Build and publish base images
 on:
   workflow_dispatch: {}
   
-  push:
-    branches: [ main ]
+  # push:
+  #   branches: [ main ]
 
-  schedule:
-    # Weekly on Tuesdays at 9am PST
-    - cron: "0 17 * * 2"
+  # schedule:
+  #   # Weekly on Tuesdays at 9am PST
+  #   - cron: "0 17 * * 2"
 
 jobs:
   build-and-publish-images:
