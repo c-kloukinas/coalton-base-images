@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.source=https://github.com/coalton-lang/base-image
 LABEL org.opencontainers.image.description="SBCL base image for Coalton CI"
 LABEL org.opencontainers.image.licenses=MIT
 
-ARG SBCL_VERSION=2.6.4
+ARG SBCL_VERSION=2.6.5
 ARG SBCL_ARCH=x86-64
 
 # Install dependencies
